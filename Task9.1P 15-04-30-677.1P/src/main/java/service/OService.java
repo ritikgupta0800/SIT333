@@ -2,6 +2,6 @@ package service;
 
 public class OService {
 
-    //check the potfolip.java file
+    //check the potfolio.java file
 
 }
