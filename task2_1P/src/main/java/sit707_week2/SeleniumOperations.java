@@ -1,83 +1,76 @@
 package sit707_week2;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-/**
- * This class demonstrates Selenium locator APIs to identify HTML elements.
- * 
- * Details in Selenium documentation https://www.selenium.dev/documentation/webdriver/elements/locators/
- * 
- * @author Ahsan Habib
- */
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 public class SeleniumOperations {
 
-	public static void sleep(int sec) {
-		try {
-			Thread.sleep(sec*1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
-	public static void officeworks_registration_page(String url) {
-		// Step 1: Locate chrome driver folder in the local drive.
-		System.setProperty("webdriver.chrome.driver", "/home/mahabib/java_lib/chromedriver-linux64/chromedriver");
-		
-		// Step 2: Use above chrome driver to open up a chromium browser.
-		System.out.println("Fire up chrome browser.");
-		WebDriver driver = new ChromeDriver();
-		
-		System.out.println("Driver info: " + driver);
-		
-		sleep(2);
-	
-		// Load a webpage in chromium browser.
-		driver.get(url);
-		
-		/*
-		 * How to identify a HTML input field -
-		 * Step 1: Inspect the webpage, 
-		 * Step 2: locate the input field, 
-		 * Step 3: Find out how to identify it, by id/name/...
-		 */
-		
-		// Find first input field which is firstname
-		WebElement element = driver.findElement(By.id("firstname"));
-		System.out.println("Found element: " + element);
-		// Send first name
-		element.sendKeys("Ahsan");
-		
-		try {
-            // Step 4: Locate and fill all required fields
+    public static void officeworks_registration_page() {
+    	System.setProperty("webdriver.chrome.driver", 
+                "/Users/ritikgupta/Downloads/chromedriver-mac-arm64/chromedriver");
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        driver.get("https://www.officeworks.com.au/app/identity/create-account");
+
+        try {
             driver.findElement(By.id("firstname")).sendKeys("Ritik");
             driver.findElement(By.id("lastname")).sendKeys("Gupta");
-            driver.findElement(By.id("email")).sendKeys("ritikgupta@example.com");
-            driver.findElement(By.id("confirmEmail")).sendKeys("ritikgupta@example.com");
-            driver.findElement(By.id("password")).sendKeys("12345"); // Intentionally weak
-            driver.findElement(By.id("confirmPassword")).sendKeys("12345");
+            driver.findElement(By.id("emailAddress")).sendKeys("ritikgupta@example.com");
+            driver.findElement(By.id("mobileNumber")).sendKeys("0412345678");
+            driver.findElement(By.id("createPassword")).sendKeys("123"); // weak password
+            driver.findElement(By.id("confirmPassword")).sendKeys("123");
 
-            // Step 5: Click the "Create Account" button
-            WebElement createAccountButton = driver.findElement(By.xpath("//button[contains(text(),'Create account')]"));
-            createAccountButton.click();
+            WebElement createAccountBtn = driver.findElement(By.xpath("//button[contains(text(),'Create account')]"));
+            createAccountBtn.click();
 
-            sleep(3); // Wait for error message to appear
+            TakesScreenshot screenshot = (TakesScreenshot) driver;
+            File srcFile = screenshot.getScreenshotAs(OutputType.FILE);
+            File destFile = new File("officeworks_registration.png");
+            org.openqa.selenium.io.FileHandler.copy(srcFile, destFile);
 
-
-        } catch (NoSuchElementException | IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Error during Officeworks form automation: " + e.getMessage());
+        } finally {
+            driver.quit();
         }
-		
-		// Sleep a while
-		sleep(2);
-		
-		// close chrome driver
-		driver.close();	
-	}
-	
-	
+    }
+
+    public static void alternative_registration_page() {
+    	System.setProperty("webdriver.chrome.driver", 
+                "/Users/ritikgupta/Downloads/chromedriver-mac-arm64/chromedriver");
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        driver.get("https://signup.ebay.com.au/pa/crte");
+
+        try {
+            driver.findElement(By.id("firstname")).sendKeys("Ritik");
+            driver.findElement(By.id("lastname")).sendKeys("Gupta");
+            driver.findElement(By.id("Email")).sendKeys("ritikgupta@example.com");
+            driver.findElement(By.id("password")).sendKeys("123"); // weak password
+
+            WebElement createAccountBtn = driver.findElement(By.id("EMAIL_REG_FORM_SUBMIT"));
+            createAccountBtn.click();
+
+            TakesScreenshot screenshot = (TakesScreenshot) driver;
+            File srcFile = screenshot.getScreenshotAs(OutputType.FILE);
+            File destFile = new File("ebay_registration.png");
+            org.openqa.selenium.io.FileHandler.copy(srcFile, destFile);
+
+        } catch (Exception e) {
+            System.out.println("Error during eBay form automation: " + e.getMessage());
+        } finally {
+            driver.quit();
+        }
+    }
 }
