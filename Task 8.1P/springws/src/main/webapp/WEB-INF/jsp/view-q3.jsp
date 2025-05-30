@@ -1,3 +1,4 @@
+<!-- src/main/webapp/WEB-INF/jsp/view-q3.jsp -->
 <html>
 <body>
 
@@ -12,9 +13,9 @@
   <label for="number2">Second number:</label><br>
   <input type="text" id="number2" name="number2"><br>
   
-  <label for="result">Multiply:</label><br>
+  <label for="result">MULTIPLY:</label><br>
   <input type="text" id="result" name="result"><br><br>   
-
+  
   <input type="submit" value="Submit">
 </form> 
 
